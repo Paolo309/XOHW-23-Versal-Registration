@@ -63,6 +63,7 @@ DIMENSION := 512      # IMAGE SIZE
 N_COUPLES_MAX := 512  # VOLUME DEPTH 
 HIST_PE := 16         # NUMBER OF PROCESSING ELEMENTS (BEST IS 16)
 ```
+Note: every time this file is changed, you need to run `make config`. If any of the parameters in section "ARCHITECTURE PARAMETERS" you also must re-build the architecture.
 
 ### Step 4 - Build
 **Optional**: this project already contains a XCLBIN, you can jump the next step.
