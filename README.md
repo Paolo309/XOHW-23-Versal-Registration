@@ -45,7 +45,7 @@ cd XOHW-23-Versal-Registration
 ```
 
 ### Step 2 - Setup the environment
-Before building and/or running the framework, run the following script
+Before building and/or running the framework, run the following script. Notice that this will source Vitis 2022.1, xrt and devtoolset-7
 ```shell
 source ./setup_all.sh
 ```
