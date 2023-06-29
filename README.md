@@ -65,6 +65,8 @@ HIST_PE := 16         # NUMBER OF PROCESSING ELEMENTS (BEST IS 16)
 ```
 Note: every time this file is changed, you need to run `make config`. If any of the parameters in section "ARCHITECTURE PARAMETERS" you also must re-build the architecture.
 
+The parameters of the transformation can be customized inside the host code, hence any modification requires to compile it again.
+
 ### Step 4 - Build
 **Optional**: this project already contains a XCLBIN, you can jump the next step.
 
@@ -78,7 +80,18 @@ Note: the default value for `NAME` is "hw_build" and the default for `TARGET` is
 ### Step 5 - Run
 The folder `build/<build_name>` contains the XCLBIN and all the other files reqiured for the execution. Move it on the host machine connected to board, enter the folder, and run the host application with:
 ```shell
-./host_overlay.exe
+./host_overlay.exe <volume_depth>
 ```
+If not specified, the volume depth is set to default to 512, which is also the maximum supported depth with the bitstream provided.
 
 The volume transformed in hardware is stored in the folder `dataset_output` as a sequence of png images, one for each slice. The folder `dataset_sw_output` contains the volume trasformed in software for comparison.
+
+
+## Extra features
+### Switch the dataset
+If the folder `dataset` contains less images than the desired volume depth, set the variable `N_COUPLES` in file `default.cfg`, then, from the root of the project, run the following command to adapt the dataset to the specified volume:
+```shell
+make -C sw switch_dataset
+```
+
+### 
