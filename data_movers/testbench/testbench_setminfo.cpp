@@ -70,20 +70,28 @@ int main(int argc, char *argv[]) {
 
 //------------------------------------------------GENERATING VOLUMES------------------------------------------
     // int n_couples = 512;
-    uint8_t* input_ref = new uint8_t[DIMENSION*DIMENSION * n_couples];
-    uint8_t* input_flt = new uint8_t[DIMENSION*DIMENSION * n_couples];
-    uint8_t* output_flt = new uint8_t[DIMENSION*DIMENSION * n_couples];
+    const int padding = (HIST_PE - (n_couples % HIST_PE)) % HIST_PE;
+
+    printf("padding: %d\n", padding);
+    printf("total: %d\n", n_couples + padding);
+
+    uint8_t* input_ref = new uint8_t[DIMENSION*DIMENSION * (n_couples + padding)];
+    uint8_t* input_flt = new uint8_t[DIMENSION*DIMENSION * (n_couples + padding)];
+    uint8_t* output_flt = new uint8_t[DIMENSION*DIMENSION * (n_couples + padding)];
     float output_data;
     
     int32_t* params = new int32_t[DIMENSION*DIMENSION];
     
     std::cout << argv[0]; 
-    if (read_volume_from_file(input_ref, DIMENSION, n_couples, "../../sw/dataset/") == -1) {
+    if (read_volume_from_file(input_ref, DIMENSION, n_couples, padding, "../../sw/dataset/") == -1) {
         std::cout << "could not open image" << std::endl;
     }
-    if (read_volume_from_file(input_flt, DIMENSION, n_couples, "../../sw/dataset/") == -1) {
+    if (read_volume_from_file(input_flt, DIMENSION, n_couples, padding, "../../sw/dataset/") == -1) {
         std::cout << "could not open image" << std::endl;
     }
+
+    write_volume_to_file(input_flt, DIMENSION, n_couples, padding, "dataset_output/"); // sd
+    return 0;
 
     std::ifstream file;
     file.open("coords_in.txt");
@@ -100,7 +108,7 @@ int main(int argc, char *argv[]) {
     
     setup_mutualInfo(stream_coords_in, stream_float_out, (ap_uint<INPUT_DATA_BITWIDTH>*)input_flt, (ap_uint<INPUT_DATA_BITWIDTH>*)output_flt, n_couples);
     
-    write_volume_to_file(output_flt, DIMENSION, n_couples, "dataset_output/"); // sd
+    write_volume_to_file(output_flt, DIMENSION, n_couples, padding, "dataset_output/"); // sd
 
     // hls::stream<INPUT_DATA_TYPE> stream_input_img;
     // write_into_stream(output_flt, stream_input_img, DIMENSION*DIMENSION * n_couples);
@@ -121,7 +129,7 @@ int main(int argc, char *argv[]) {
     uint8_t* transformed = new uint8_t[DIMENSION*DIMENSION*n_couples];
     // const float ANG = (15 * M_PI) / 180.f; ; // radians
     transform_volume(input_flt, transformed, TX, TY, ANG, DIMENSION, n_couples);
-    write_volume_to_file(transformed, DIMENSION, n_couples, "dataset_output_sw/");
+    write_volume_to_file(transformed, DIMENSION, n_couples, padding,  "dataset_output_sw/");
 
     for(int k = 0; k < n_couples; k++) {
         for(int i=0;i<DIMENSION;i++){

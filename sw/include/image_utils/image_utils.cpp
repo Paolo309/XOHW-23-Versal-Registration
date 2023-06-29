@@ -205,7 +205,7 @@ int read_volume_from_file_DICOM(uint8_t *volume, const int SIZE, const int N_COU
     #endif
 }
 
-int read_volume_from_file_PNG(uint8_t *volume, const int SIZE, const int N_COUPLES, const std::string &path) {
+int read_volume_from_file_PNG(uint8_t *volume, const int SIZE, const int N_COUPLES, const int PADDING, const std::string &path) {
     for (int i = 0; i < N_COUPLES; i++) {
         std::string s = path + "IM" + std::to_string(i+1) + ".png";
         cv::Mat image = cv::imread(s, cv::IMREAD_GRAYSCALE);
@@ -214,26 +214,34 @@ int read_volume_from_file_PNG(uint8_t *volume, const int SIZE, const int N_COUPL
         // copy the slice into the buffer
         std::vector<uint8_t> tmp(SIZE*SIZE);
         tmp.assign(image.begin<uint8_t>(), image.end<uint8_t>());
-        write_slice_in_buffer(tmp.data(), volume, i, SIZE, N_COUPLES);
+        write_slice_in_buffer(tmp.data(), volume, i, SIZE, N_COUPLES+PADDING);
     }
+
+    for (int i = 0; i < PADDING; i++) {
+        // copy the slice into the buffer
+        std::vector<uint8_t> tmp(SIZE*SIZE);
+        tmp.assign(tmp.size(), 0);
+        write_slice_in_buffer(tmp.data(), volume, N_COUPLES+i, SIZE, N_COUPLES+PADDING);
+    }
+
     return 0;
 }
 
 
-void write_volume_to_file(uint8_t *volume, const int SIZE, const int N_COUPLES, const std::string &path) {
+void write_volume_to_file(uint8_t *volume, const int SIZE, const int N_COUPLES, const int PADDING, const std::string &path) {
     for (int i = 0; i < N_COUPLES; i++) {
         std::vector<uint8_t> tmp(SIZE*SIZE);
-        read_slice_from_buffer(volume, tmp.data(), i, SIZE, N_COUPLES);
+        read_slice_from_buffer(volume, tmp.data(), i, SIZE, N_COUPLES+PADDING);
         cv::Mat slice = (cv::Mat(SIZE, SIZE, CV_8U, tmp.data())).clone();
         std::string s = path + "IM" + std::to_string(i+1) + ".png";
         cv::imwrite(s, slice);
     }
 }
 
-int read_volume_from_file(uint8_t *volume, const int SIZE, const int N_COUPLES, const std::string &path, const ImageFormat imageFormat) {
+int read_volume_from_file(uint8_t *volume, const int SIZE, const int N_COUPLES, const int PADDING, const std::string &path, const ImageFormat imageFormat) {
     switch (imageFormat) {
         case ImageFormat::PNG:
-            return read_volume_from_file_PNG(volume, SIZE, N_COUPLES, path);
+            return read_volume_from_file_PNG(volume, SIZE, N_COUPLES, PADDING, path);
         case ImageFormat::DICOM:
             return read_volume_from_file_DICOM(volume, SIZE, N_COUPLES, path);
     }

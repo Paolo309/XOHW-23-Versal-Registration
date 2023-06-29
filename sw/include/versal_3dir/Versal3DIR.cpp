@@ -30,6 +30,7 @@ public:
     xrt::device& device;
     xrt::uuid& xclbin_uuid;
     int n_couples;
+    int padding;
     size_t buffer_size;
 
     uint8_t* input_ref = NULL;
@@ -57,8 +58,12 @@ public:
     //
     // Initialize the board configuring it for a specific volume-depth
     //
-    Versal3DIR(xrt::device& device, xrt::uuid& xclbin_uuid, int n_couples)
-        : device(device), xclbin_uuid(xclbin_uuid), n_couples(n_couples), buffer_size(FLOAT_INPUT_BUFFER_SIZE * n_couples)
+    Versal3DIR(xrt::device& device, xrt::uuid& xclbin_uuid, int n_couples) : 
+        device(device), 
+        xclbin_uuid(xclbin_uuid), 
+        n_couples(n_couples), 
+        padding((HIST_PE - (n_couples % HIST_PE)) % HIST_PE),
+        buffer_size(FLOAT_INPUT_BUFFER_SIZE * (n_couples+padding))
     {
         // create kernel objects
         krnl_setup_aie  = xrt::kernel(device, xclbin_uuid, "setup_aie");
@@ -85,28 +90,28 @@ public:
         // set setup_setminfo kernel arguments
         run_setup_minfo.set_arg(arg_setminfo_in_flt_original_ptr, buffer_setminfo_flt_in);
         run_setup_minfo.set_arg(arg_setminfo_out_flt_transformed_ptr, buffer_setminfo_flt_transformed);
-        run_setup_minfo.set_arg(arg_setminfo_in_n_couples, n_couples);
+        run_setup_minfo.set_arg(arg_setminfo_in_n_couples, n_couples+padding);
         
         // set mutual_info kernel arguments
         run_minfo.set_arg(arg_minfo_ref_ptr, buffer_minfo_ref);
         run_minfo.set_arg(arg_minfo_rslt_ptr, buffer_minfo_rlst);
-        run_minfo.set_arg(arg_minfo_ncouples_val, n_couples);
+        run_minfo.set_arg(arg_minfo_ncouples_val, n_couples+padding);
     }
 
     //
     // Read volumes from file
     //
     int read_volumes_from_file(const std::string &path_ref, const std::string &path_flt, const ImageFormat imageFormat = ImageFormat::PNG) {
-        input_ref  = new uint8_t[DIMENSION*DIMENSION * n_couples];
-        input_flt  = new uint8_t[DIMENSION*DIMENSION * n_couples];
-        output_flt = new uint8_t[DIMENSION*DIMENSION * n_couples];
+        input_ref  = new uint8_t[DIMENSION*DIMENSION * (n_couples+padding)];
+        input_flt  = new uint8_t[DIMENSION*DIMENSION * (n_couples+padding)];
+        output_flt = new uint8_t[DIMENSION*DIMENSION * (n_couples+padding)];
         
-        if (read_volume_from_file(input_ref, DIMENSION, n_couples, path_ref, imageFormat) == -1) {
+        if (read_volume_from_file(input_ref, DIMENSION, n_couples, padding, path_ref, imageFormat) == -1) {
             std::cerr << "Error: Could not open reference volume. Some file in path \"" << path_ref << "\" might not exist" << std::endl;
             return -1;
         }
 
-        if (read_volume_from_file(input_flt, DIMENSION, n_couples, path_flt, imageFormat) == -1) {
+        if (read_volume_from_file(input_flt, DIMENSION, n_couples, padding, path_flt, imageFormat) == -1) {
             std::cerr << "Error: Could not open floating volume. Some file in path \"" << path_flt << "\" might not exist" << std::endl;
             return -1;
         }
@@ -120,7 +125,7 @@ public:
         run_setup_aie.set_arg(arg_setup_aie_in_tx,  TX);
         run_setup_aie.set_arg(arg_setup_aie_in_ty,  TY);
         run_setup_aie.set_arg(arg_setup_aie_in_ang, ANG);
-        run_setup_aie.set_arg(arg_setup_aie_in_n_couples, (float)n_couples);
+        run_setup_aie.set_arg(arg_setup_aie_in_n_couples, (float)(n_couples+padding));
     }
 
     // 

@@ -1,15 +1,16 @@
 #include "software_mi.hpp"
 
 double software_mi(int n_couples, const int TX, const int TY, const float ANG, const std::string &input_path, double* duration_sec) {
-    uint8_t* input_ref = new uint8_t[DIMENSION*DIMENSION * n_couples];
-    uint8_t* input_flt = new uint8_t[DIMENSION*DIMENSION * n_couples];
-    uint8_t* output_flt = new uint8_t[DIMENSION*DIMENSION * n_couples];
+    const int padding = (HIST_PE - (n_couples % HIST_PE)) % HIST_PE;
+    uint8_t* input_ref = new uint8_t[DIMENSION*DIMENSION * (n_couples + padding)];
+    uint8_t* input_flt = new uint8_t[DIMENSION*DIMENSION * (n_couples + padding)];
+    uint8_t* output_flt = new uint8_t[DIMENSION*DIMENSION * (n_couples + padding)];
 
-    if (read_volume_from_file(input_ref, DIMENSION, n_couples, input_path) == -1) {
+    if (read_volume_from_file(input_ref, DIMENSION, n_couples, padding, input_path) == -1) {
         std::cerr << "Could not open file" << std::endl;
         return 1;
     }
-    if (read_volume_from_file(input_flt, DIMENSION, n_couples, input_path) == -1) {
+    if (read_volume_from_file(input_flt, DIMENSION, n_couples, padding, input_path) == -1) {
         std::cerr << "Could not open file" << std::endl;
         return 1;
     }
@@ -106,7 +107,7 @@ double software_mi(int n_couples, const int TX, const int TY, const float ANG, c
     if (duration_sec != NULL)
         *duration_sec = timer_sw.getElapsedSeconds();
 
-    write_volume_to_file(output_flt,DIMENSION,n_couples,"dataset_sw_output/");
+    write_volume_to_file(output_flt,DIMENSION,n_couples,padding,"dataset_sw_output/");
     delete[] input_flt;
     delete[] input_ref;
     delete[] output_flt;

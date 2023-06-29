@@ -20,8 +20,8 @@
 // POSSIBLE FORMATS
 enum ImageFormat { DICOM, PNG };
 
-int read_volume_from_file(uint8_t *volume, const int SIZE, const int N_COUPLES, const std::string &path, const ImageFormat imageFormat = ImageFormat::PNG);
-void write_volume_to_file(uint8_t *volume, const int SIZE, const int N_COUPLES, const std::string &path);
+int read_volume_from_file(uint8_t *volume, const int SIZE, const int N_COUPLES, const int PADDING, const std::string &path, const ImageFormat imageFormat = ImageFormat::PNG);
+void write_volume_to_file(uint8_t *volume, const int SIZE, const int N_COUPLES, const int PADDING, const std::string &path);
 
 
 uint8_t track_reads(uint8_t *mem, const int index, float *ratio = NULL);

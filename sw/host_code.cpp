@@ -29,7 +29,12 @@ float hw_transform(Versal3DIR& board, float TX, float TY, float ANG, double* dur
 }
 
 int main(int argc, char *argv[]) {
+    
     int n_couples = 512;
+    if (argc == 2) {
+        n_couples = atoi(argv[1]);
+    }
+
     const float TX = 30;
     const float TY = 30;
     const float ANG_DEG = 25;
@@ -51,6 +56,8 @@ int main(int argc, char *argv[]) {
 
 //----------------------------------------------INITIALIZING THE BOARD------------------------------------------
     Versal3DIR board = Versal3DIR(device, xclbin_uuid, n_couples);
+
+    printf("Padding: %d\n", board.padding);
 
     // Read input volumes from disk
     std::cout << "2. Reading input volumes from disk... ";
@@ -103,7 +110,7 @@ int main(int argc, char *argv[]) {
         outfile << duration_execution_sec + duration_write_flt_sec + duration_read_flt_sec <<std::endl;
         
         std::cout << "7. Writing output volume on disk... ";
-        write_volume_to_file(board.output_flt, DIMENSION , n_couples, "dataset_output/");
+        write_volume_to_file(board.output_flt, DIMENSION , n_couples, board.padding, "dataset_output/");
         std::cout << "Done" << std::endl;
 
         // ---------------------------------CONFRONTO PER VERIFICARE L'ERRORE--------------------------------------
