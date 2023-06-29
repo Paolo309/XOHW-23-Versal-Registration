@@ -33,6 +33,8 @@ int main(int argc, char *argv[]) {
     int n_couples = 512;
     if (argc == 2) {
         n_couples = atoi(argv[1]);
+        if (n_couples > N_COUPLES_MAX)
+            n_couples = N_COUPLES_MAX;
     }
 
     const float TX = 30;
