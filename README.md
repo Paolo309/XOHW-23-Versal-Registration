@@ -75,13 +75,9 @@ Note: the default value for `NAME` is "hw_build" and the default for `TARGET` is
 
 
 ### Step 5 - Run
-First, move to the folder containing the buld:
-```shell
-cd <build_name>
-```
-Then run the host application my typing
+The folder `build/<build_name>` contains the XCLBIN and all the other files reqiured for the execution. Move it on the host machine connected to board, enter the folder, and run the host application with:
 ```shell
 ./host_overlay.exe
 ```
 
-The volume trasnformed in hardware is stored in the folder `dataset_output` as a sequence of png images, on for each slice. The folder `dataset_sw_output` contains the volume trasformed in software for comparison.
+The volume transformed in hardware is stored in the folder `dataset_output` as a sequence of png images, one for each slice. The folder `dataset_sw_output` contains the volume trasformed in software for comparison.
