@@ -56,7 +56,15 @@ source <PATH_TO_XILINX_VITIS_2022_1>/settings64.sh
 scl enable devtoolset-7 bash
 ```
 
-### Step 3 - Build
+### Step 3 - Configure
+Edit `default.cfg` to configure the accelerator. This step can be skipped, and the accelerator will be configured to support 512x512x512 volumes. Following, there are the configurable parameters:
+```
+DIMENSION := 512      # IMAGE SIZE
+N_COUPLES_MAX := 512  # VOLUME DEPTH 
+HIST_PE := 16         # NUMBER OF PROCESSING ELEMENTS (BEST IS 16)
+```
+
+### Step 4 - Build
 **Optional**: this project already contains a XCLBIN, you can jump the next step.
 
 To build the project, run: 
@@ -66,7 +74,7 @@ make build_and_pack NAME=<build_name> TARTGET=<hw|hw_emu>
 Note: the default value for `NAME` is "hw_build" and the default for `TARGET` is "hw".
 
 
-### Step 4 - Run
+### Step 5 - Run
 First, move to the folder containing the buld:
 ```shell
 cd <build_name>
