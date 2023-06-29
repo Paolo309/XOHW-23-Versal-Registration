@@ -57,6 +57,8 @@ scl enable devtoolset-7 bash
 ```
 
 ### Step 3 - Configure
+**Optional**: this can be skipped if you do not want to change the default configuration.
+
 Edit `default.cfg` to configure the accelerator. This step can be skipped, and the accelerator will be configured to support 512x512x512 volumes. Following, there are the configurable parameters:
 ```
 DIMENSION := 512      # IMAGE SIZE
