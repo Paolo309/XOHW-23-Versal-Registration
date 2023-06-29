@@ -8,7 +8,7 @@ Accelerator for one step of a 3D Image Registration algorithm exploiting the eth
 |----------------------|-----|
 | **Team number**          | xohw23-176 |
 | **Project name**         | Heterogeneous Higly Integrated Systems for Image Registration |
-| **YouTube's video**      | TODO |
+| **YouTube's video**      | https://youtu.be/2t6j8ewgJAk |
 | **Project's repository** | https://github.com/Paolo309/XOHW-23-Versal-Registration |
 | **University name**      | Politecnico di Milano |
 | **Participant (email**)  | Paolo Salvatore Galfano (paolosalvatore.galfano@mail.polimi.it) |
