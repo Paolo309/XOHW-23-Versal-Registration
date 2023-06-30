@@ -31,11 +31,9 @@ The archive is structured as follows:
 └─ Makefile/           # Top-level Makefile to build and run
 ```
  
-
 ## Instructions to build and test project
 
-### Step 0 - Using the provided XCLBIN
-In the root folder of the repository submitted for the competition, the folder `build/16PE` contains the XCLBIN, the dataset and the compiled host application. To test the architecture withou the need to build the XCLBIN, you can immediately **jump to Step 5**.
+**Note**: *for the AMD Open Hardware competition, **plese refer to the README file in the root of the folder `BUILD_EXAMPLE`** containing a runnable example of the project, which comprises the XCLBIN, the compiled host application and the dataset.*
 
 ### Step 1 - Clone the repository
 Open a terminal, then clone the repository by running the following command
@@ -73,8 +71,6 @@ Note: every time this file is changed, you need to run `make config`. If any of 
 The parameters of the transformation can be customized inside the host code, hence any modification requires to compile it again.
 
 ### Step 4 - Build
-**Optional**: this project already contains a XCLBIN, you can jump the next step.
-
 To build the project, run: 
 ```shell
 make build_and_pack NAME=<build_name> TARTGET=<hw|hw_emu>
