@@ -34,6 +34,9 @@ The archive is structured as follows:
 
 ## Instructions to build and test project
 
+### Step 0 - Using the provided XCLBIN
+In the root folder of the repository submitted for the competition, the folder `build/16PE` contains the XCLBIN, the dataset and the compiled host application. To test the architecture withou the need to build the XCLBIN, you can immediately **jump to Step 5**.
+
 ### Step 1 - Clone the repository
 Open a terminal, then clone the repository by running the following command
 ```shell
