@@ -84,7 +84,7 @@ The folder `build/<build_name>` contains the XCLBIN and all the other files reqi
 ```shell
 ./host_overlay.exe <volume_depth>
 ```
-If not specified, the volume depth is set to default to 512, which is also the maximum supported depth with the bitstream provided.
+If not specified, the volume depth is set by default to 512, which is also the maximum supported depth with the bitstream provided.
 
 The volume transformed in hardware is stored in the folder `dataset_output` as a sequence of png images, one for each slice. The folder `dataset_sw_output` contains the volume trasformed in software for comparison.
 
