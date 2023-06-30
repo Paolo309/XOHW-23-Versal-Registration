@@ -1,0 +1,1 @@
+This folder will contain the output saved using the accelerated algorithm.
