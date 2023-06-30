@@ -62,7 +62,7 @@ scl enable devtoolset-7 bash
 Edit `default.cfg` to configure the accelerator. This step can be skipped, and the accelerator will be configured to support 512x512x512 volumes. Following, there are the configurable parameters:
 ```
 DIMENSION := 512      # IMAGE SIZE
-N_COUPLES_MAX := 512  # VOLUME DEPTH 
+N_COUPLES_MAX := 512  # MAXIMUM VOLUME DEPTH 
 HIST_PE := 16         # NUMBER OF PROCESSING ELEMENTS (BEST IS 16)
 ```
 Note: every time this file is changed, you need to run `make config`. If any of the parameters in section "ARCHITECTURE PARAMETERS" you also must re-build the architecture.
