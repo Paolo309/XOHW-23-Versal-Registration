@@ -96,8 +96,6 @@ pack:
 	cp -r sw/dataset/** build/$(NAME)/dataset/
 	cp sw/host_overlay.exe build/$(NAME)/
 	cp hw/overlay_hw.xclbin build/$(NAME)/
-	cp loop_examine.sh build/$(NAME)/
-	cp extractpower.py build/$(NAME)/
 	mkdir -p build/$(NAME)/dataset_output
 	mkdir -p build/$(NAME)/dataset_sw_output
 
