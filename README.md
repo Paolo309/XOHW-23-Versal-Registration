@@ -33,7 +33,7 @@ The archive is structured as follows:
  
 ## Instructions to build and test project
 
-**Note**: *for the AMD Open Hardware competition, **plese refer to the README file in the root of the folder `BUILD_EXAMPLE`** containing a runnable example of the project, which comprises the XCLBIN, the compiled host application and the dataset.*
+**Note**: *for the AMD Open Hardware competition, **plese refer to the README file in the root of the archive submitted for the competition** containing a runnable example of the project, which comprises the XCLBIN, the compiled host application and the dataset.*
 
 ### Step 1 - Clone the repository
 Open a terminal, then clone the repository by running the following command
