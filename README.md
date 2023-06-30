@@ -90,10 +90,29 @@ The volume transformed in hardware is stored in the folder `dataset_output` as a
 
 
 ## Extra features
+### Pack the build
+After changing the dataset or re-building the host code, you should pack the build before running the framework. To do so, run
+```shell
+make pack NAME=<build_name>
+```
+This creates the folder `build/<builname>` containing the xclbin, the compiled host code and the dataset.
+
 ### Switch the dataset
 If the folder `dataset` contains less images than the desired volume depth, set the variable `N_COUPLES` in file `default.cfg`, then, from the root of the project, run the following command to adapt the dataset to the specified volume:
 ```shell
 make -C sw switch_dataset
 ```
+Then, run
+```shell
+make pack NAME=<build_name>
+```
 
-### 
+### Build the host code
+To build the host code, from the root of the project, run
+```shell
+make build_sw
+```
+Then, run
+```shell
+make pack NAME=<build_name>
+```
