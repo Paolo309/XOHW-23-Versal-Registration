@@ -47,7 +47,7 @@ double software_mi(int n_couples, const int TX, const int TY, const float ANG, c
 
     Timer timer_sw;
     timer_sw.start();
-    transform_volume(input_flt, output_flt, TX, TY, ANG, DIMENSION, n_couples);
+    transform_volume(input_flt, output_flt, TX, TY, ANG, DIMENSION, n_couples + padding);
 
     // ----------------------------------------------------CALCOLO SOFTWARE DELLA MI-----------------------------------------
 
@@ -58,19 +58,23 @@ double software_mi(int n_couples, const int TX, const int TY, const float ANG, c
         }
     }
 
-    for(int k = 0; k < n_couples; k++) {
+    const int N_COUPLES_TOTAL = n_couples + padding;
+
+    for(int k = 0; k < N_COUPLES_TOTAL; k++) {
         for(int i=0;i<DIMENSION;i++){
             for(int j=0;j<DIMENSION;j++){
-                unsigned int a=input_ref[k * DIMENSION * DIMENSION + i * DIMENSION + j];
-                unsigned int b=output_flt[k * DIMENSION * DIMENSION + i * DIMENSION + j];
+                unsigned int a=input_ref[i * DIMENSION * (N_COUPLES_TOTAL) + j * (N_COUPLES_TOTAL) + k];
+                unsigned int b=output_flt[i * DIMENSION * (N_COUPLES_TOTAL) + j * (N_COUPLES_TOTAL) + k];
                 j_h[a][b]= (j_h[a][b])+1;
             }
         }
     }
 
+    //j_h[0][0] = j_h[0][0] - padding*DIMENSION*DIMENSION; // per versal = sottrarre i valori in j_h dovuti al padding
+
     for (int i=0; i<J_HISTO_ROWS; i++) {
         for (int j=0; j<J_HISTO_COLS; j++) {
-            j_h[i][j] = j_h[i][j]/(n_couples*DIMENSION*DIMENSION);
+            j_h[i][j] = j_h[i][j]/((N_COUPLES_TOTAL)*DIMENSION*DIMENSION); // per versal = dividere per n_couples anziché n_couples+padding
         }
     }
 
